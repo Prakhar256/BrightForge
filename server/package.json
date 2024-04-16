@@ -4,8 +4,9 @@
   "description": "Learning Management system",
   "main": "server.js",
   "scripts": {
+    "start": "node build/server.js",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "dev": "tsnd --respawn server.ts"
+    "dev": "tsnd --respawn --transpile-only server.ts"
   },
   "author": "Prakhar Jain",
   "license": "ISC",
