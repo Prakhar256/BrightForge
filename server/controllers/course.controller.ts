@@ -2,7 +2,7 @@ import { NextFunction, Request, Response } from "express";
 import { CatchAsyncError } from "../middleware/catchAsyncErrors";
 import ErrorHandler from "../utils/ErrorHandler";
 import cloudinary from "cloudinary";
-import { createCourse } from "../services/course.service";
+import { createCourse, getAllCoursesService } from "../services/course.service";
 import CourseModel from "../models/course.model";
 import { redis } from "../utils/redis";
 import mongoose from "mongoose";
@@ -10,6 +10,7 @@ import path from "path";
 import sendMail from "../utils/sendMail";
 import ejs from "ejs";
 import NotificationModel from "../models/notification.model";
+import { getAllUsersService } from "../services/user.service";
 
 // upload course
 export const uploadCourse = CatchAsyncError(
@@ -264,7 +265,6 @@ export const addAnswer = CatchAsyncError(
 
       await course?.save();
 
-      
       if (req.user?._id === question.user._id) {
         // create a notification
         await NotificationModel.create({
@@ -277,12 +277,12 @@ export const addAnswer = CatchAsyncError(
           name: question.user.name,
           title: courseContent.title,
         };
-        
+
         const html = await ejs.renderFile(
           path.join(__dirname, "../mails/question-reply.ejs"),
           data
         );
-        
+
         try {
           await sendMail({
             email: question.user.email,
@@ -299,7 +299,6 @@ export const addAnswer = CatchAsyncError(
         success: true,
         course,
       });
-
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
     }
@@ -313,8 +312,8 @@ interface IAddReviewData {
   userId: string;
 }
 
-export const addReview=CatchAsyncError(
-  async (req: Request, res: Response, next: NextFunction) =>{
+export const addReview = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
     try {
       const userCourseList = req.user?.courses;
 
@@ -368,12 +367,11 @@ export const addReview=CatchAsyncError(
         success: true,
         course,
       });
-    }
-    catch (error: any) {
+    } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
     }
   }
-)
+);
 
 // Add reply to review
 interface IAddReviewData {
@@ -401,7 +399,7 @@ export const addReplyToReview = CatchAsyncError(
         return next(new ErrorHandler("Review not found", 404));
       }
 
-      // If review found 
+      // If review found
       const replyData: any = {
         user: req.user,
         comment,
@@ -413,7 +411,7 @@ export const addReplyToReview = CatchAsyncError(
         review.commentReplies = [];
       }
       review.commentReplies?.push(replyData);
-      
+
       await course?.save();
 
       await redis.set(courseId, JSON.stringify(course), "EX", 604800); // 7days
@@ -424,6 +422,42 @@ export const addReplyToReview = CatchAsyncError(
       });
     } catch (error: any) {
       return next(new ErrorHandler(error.message, 500));
+    }
+  }
+);
+
+// get all courses --- only for admin
+export const getAdminAllCourses = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      getAllCoursesService(res);
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
+    }
+  }
+);
+
+// Delete course --only for admin
+export const deleteCourse = CatchAsyncError(
+  async (req: Request, res: Response, next: NextFunction) => {
+    try {
+      const { id } = req.params;
+      const course = await CourseModel.findById(id);
+
+      if (!course) {
+        return next(new ErrorHandler("course not found", 404));
+      }
+
+      await course.deleteOne({ id });
+
+      await redis.del(id);
+
+      res.status(200).json({
+        success: true,
+        message: "course deleted successfully",
+      });
+    } catch (error: any) {
+      return next(new ErrorHandler(error.message, 400));
     }
   }
 );
