@@ -12,7 +12,7 @@ import avatar from "../../public/assets/avatar.png"
 import { toast } from "react-hot-toast";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 import { useSession } from "next-auth/react";
-import { useSocialAuthMutation } from "@/redux/features/auth/authApi";
+import { useLogOutQuery, useSocialAuthMutation } from "@/redux/features/auth/authApi";
 
 type Props = {
   open: boolean;
@@ -27,6 +27,10 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
   const {data:userData} = useLoadUserQuery(undefined,{});
   const {data}=useSession();
   const [socialAuth, { isSuccess, error }] = useSocialAuthMutation();
+  const [logout, setLogout] = useState(false);
+  const {} = useLogOutQuery(undefined, {
+    skip: !logout ? true : false,
+  });
 
   useEffect(() => {
       if (!userData) {
@@ -43,6 +47,9 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
           toast.success("Login Successfully");
         }
       }
+      if(data === null){
+        setLogout(true);
+    }
   }, [data, userData]);
 
   // If we are scrolling down more than 85 then we are setting state to active
