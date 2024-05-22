@@ -11,6 +11,7 @@
   "author": "Prakhar Jain",
   "license": "ISC",
   "dependencies": {
+    "@mui/icons-material": "^5.15.18",
     "@types/bcryptjs": "^2.4.6",
     "@types/cookie-parser": "^1.4.7",
     "@types/cors": "^2.8.17",
@@ -31,6 +32,7 @@
     "mongoose": "^8.3.0",
     "node-cron": "^3.0.3",
     "nodemailer": "^6.9.13",
+    "react-pro-sidebar": "^1.1.0",
     "ts-node-dev": "^2.0.0",
     "typescript": "^5.4.4"
   },
