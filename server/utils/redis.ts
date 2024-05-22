@@ -1,7 +1,7 @@
 import { Redis } from "ioredis";
 require("dotenv").config();
 
-const redisClient = (p0: { lazyConnect: boolean; keepAlive: number; connectTimeout: number }) => {
+const redisClient = (p0: {keepAlive: number; connectTimeout: number }) => {
     if (process.env.REDIS_URL) {
       console.log(`Redis connected`);
       return process.env.REDIS_URL;
@@ -9,4 +9,4 @@ const redisClient = (p0: { lazyConnect: boolean; keepAlive: number; connectTimeo
     throw new Error("Redis connection failed");
   };
   
-export const redis = new Redis(redisClient({ lazyConnect: true, keepAlive: 1000, connectTimeout: 10000 }));
+export const redis = new Redis(redisClient({keepAlive: 1000, connectTimeout: 10000 }));

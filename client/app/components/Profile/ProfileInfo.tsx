@@ -5,7 +5,10 @@ import { AiOutlineCamera } from "react-icons/ai";
 import avatarIcon from "../../../public/assets/avatar.png";
 import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
 import { toast } from "react-hot-toast";
-import { useUpdateAvatarMutation } from "@/redux/features/user/userApi";
+import {
+  useEditProfileMutation,
+  useUpdateAvatarMutation,
+} from "@/redux/features/user/userApi";
 
 type Props = {
   avatar: string | null;
@@ -15,6 +18,8 @@ type Props = {
 const ProfileInfo: FC<Props> = ({ avatar, user }) => {
   const [name, setName] = useState(user && user.name);
   const [updateAvatar, { isSuccess, error }] = useUpdateAvatarMutation();
+  const [editProfile, { isSuccess: success, error: updateError }] =
+    useEditProfileMutation();
   const [loadUser, setLoadUser] = useState(false);
   const {} = useLoadUserQuery(undefined, { skip: loadUser ? false : true });
   const imageHandler = async (e: any) => {
@@ -33,13 +38,23 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
     if (isSuccess) {
       setLoadUser(true);
     }
-    if (error) {
+    if (error || updateError) {
       console.log(error);
-    } 
-  }, [isSuccess, error]);
+    }
+    if(success){
+      toast.success("Profile updated successfully!");
+      setLoadUser(true);
+    }
+  }, [isSuccess, error,success, updateError]);
 
-
-  const handleSubmit = async (e: any) => {};
+  const handleSubmit = async (e: any) => {
+    e.preventDefault();
+    if (name !== "") {
+      await editProfile({
+        name: name,
+      });
+    }
+  };
 
   return (
     <>
@@ -73,7 +88,7 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
         <form onSubmit={handleSubmit}>
           <div className="800px:w-[50%] m-auto block pb-4">
             <div className="w-[100%]">
-              <label className="block pb-2">Full Name</label>
+              <label className="block pb-2 dark:text-white text-black">Full Name</label>
               <input
                 type="text"
                 className={`${styles.input} !w-[95%] mb-4 800px:mb-0`}
@@ -83,7 +98,7 @@ const ProfileInfo: FC<Props> = ({ avatar, user }) => {
               />
             </div>
             <div className="w-[100%] pt-2">
-              <label className="block pb-2">Email Address</label>
+              <label className="block pb-2 dark:text-white text-black">Email Address</label>
               <input
                 type="text"
                 readOnly

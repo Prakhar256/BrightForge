@@ -1,31 +1,34 @@
+"use client";
 import Link from "next/link";
-import React, { FC, useState, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import NavItems from "../utils/NavItems";
 import { ThemeSwitcher } from "../utils/ThemeSwitcher";
 import { HiOutlineMenuAlt3, HiOutlineUserCircle } from "react-icons/hi";
-import CustomModal from "../utils/CustomModal"
+import CustomModal from "../utils/CustomModal";
 import Login from "../components/Auth/Login";
 import SignUp from "../components/Auth/SignUp";
-import Verification from "../components/Auth/Verification" 
+import Verification from "../components/Auth/Verification";
 import Image from "next/image";
-import avatar from "../../public/assets/avatar.png"
-import { toast } from "react-hot-toast";
-import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
+import avatar from "../../public/assets/avatar.png";
 import { useSession } from "next-auth/react";
 import { useLogOutQuery, useSocialAuthMutation } from "@/redux/features/auth/authApi";
+import { toast } from "react-hot-toast";
+import { useLoadUserQuery } from "@/redux/features/api/apiSlice";
+import Loader from "./Loader/Loader";
 
 type Props = {
   open: boolean;
   setOpen: (open: boolean) => void;
   activeItem: number;
-  route:string;
+  route: string;
   setRoute: (route: string) => void;
 };
+
 const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
   const [active, setActive] = useState(false);
   const [openSidebar, setOpenSidebar] = useState(false);
-  const {data:userData} = useLoadUserQuery(undefined,{});
-  const {data}=useSession();
+  const {data:userData,isLoading,refetch} = useLoadUserQuery(undefined,{});
+  const { data } = useSession();
   const [socialAuth, { isSuccess, error }] = useSocialAuthMutation();
   const [logout, setLogout] = useState(false);
   const {} = useLogOutQuery(undefined, {
@@ -33,6 +36,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
   });
 
   useEffect(() => {
+    if(!isLoading){
       if (!userData) {
         if (data) {
           socialAuth({
@@ -40,6 +44,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
             name: data?.user?.name,
             avatar: data.user?.image,
           });
+          refetch();
         }
       }
       if(data === null){
@@ -47,12 +52,12 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
           toast.success("Login Successfully");
         }
       }
-      if(data === null){
-        setLogout(true);
+      if(data === null && !isLoading && !userData){
+          setLogout(true);
+      }
     }
-  }, [data, userData]);
+  }, [data, userData,isLoading]);
 
-  // If we are scrolling down more than 85 then we are setting state to active
   if (typeof window !== "undefined") {
     window.addEventListener("scroll", () => {
       if (window.scrollY > 85) {
@@ -62,6 +67,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
       }
     });
   }
+
   const handleClose = (e: any) => {
     if (e.target.id === "screen") {
       {
@@ -69,12 +75,18 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
       }
     }
   };
+
   return (
-    <div className="w-full relative">
+   <>
+   {
+    isLoading ? (
+      <Loader />
+    ) : (
+      <div className="w-full relative">
       <div
         className={`${
           active
-            ? "dark:bg-opacity-50 bg-white dark:bg-gradient-to-b dark:from-gray-900 dark:to-black fixed top-0 left-0 w-full h-[80px] z-[80] border-b dark:border-[#ffffff1c] shadow-xl transition duration-500 "
+            ? "dark:bg-opacity-50 bg-white dark:bg-gradient-to-b dark:from-gray-900 dark:to-black fixed top-0 left-0 w-full h-[80px] z-[80] border-b dark:border-[#ffffff1c] shadow-xl transition duration-500"
             : "w-full border-b dark:border-[#ffffff1c] h-[80px] z-[80] dark:shadow"
         }`}
       >
@@ -82,17 +94,16 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
           <div className="w-full h-[80px] flex items-center justify-between p-3">
             <div>
               <Link
-                href={""}
+                href={"/"}
                 className={`text-[25px] font-Poppins font-[500] text-black dark:text-white`}
               >
-                Bright Forge
+                Elearning
               </Link>
             </div>
-            <div className="flex item-centre">
+            <div className="flex items-center">
               <NavItems activeItem={activeItem} isMobile={false} />
               <ThemeSwitcher />
-
-              {/* for mobile users only*/}
+              {/* only for mobile */}
               <div className="800px:hidden">
                 <HiOutlineMenuAlt3
                   size={25}
@@ -107,7 +118,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
                     alt=""
                     width={30}
                     height={30}
-                    className="w-[30px] h-[30px] rounded-full cursor-pointer ml-3"
+                    className="w-[30px] h-[30px] rounded-full cursor-pointer"
                     style={{border: activeItem === 5 ? "2px solid #37a39a" : "none"}}
                   />
                 </Link>
@@ -122,7 +133,6 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
           </div>
         </div>
 
-
         {/* mobile sidebar */}
         {openSidebar && (
           <div
@@ -132,17 +142,28 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
           >
             <div className="w-[70%] fixed z-[999999999] h-screen bg-white dark:bg-slate-900 dark:bg-opacity-90 top-0 right-0">
               <NavItems activeItem={activeItem} isMobile={true} />
-              
+              {userData?.user ? (
+                <Link href={"/profile"}>
+                  <Image
+                    src={userData?.user.avatar ? userData.user.avatar.url : avatar}
+                    alt=""
+                    width={30}
+                    height={30}
+                    className="w-[30px] h-[30px] rounded-full ml-[20px] cursor-pointer"
+                    style={{border: activeItem === 5 ? "2px solid #37a39a" : "none"}}
+                  />
+                </Link>
+              ) : (
                 <HiOutlineUserCircle
                   size={25}
                   className="hidden 800px:block cursor-pointer dark:text-white text-black"
                   onClick={() => setOpen(true)}
                 />
-              
+              )}
               <br />
               <br />
               <p className="text-[16px] px-2 pl-5 text-black dark:text-white">
-                Copyright © 2024 BrightForge
+                Copyright © 2023 ELearning
               </p>
             </div>
           </div>
@@ -161,6 +182,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
           )}
         </>
       )}
+
       {route === "Sign-Up" && (
         <>
           {open && (
@@ -189,6 +211,9 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
         </>
       )}
     </div>
+    )
+   }
+   </>
   );
 };
 
