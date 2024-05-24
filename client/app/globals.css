@@ -2,13 +2,12 @@
 @tailwind components;
 @tailwind utilities;
 
-html{
+/* html{
   scrollbar-width: none;
-}
+} */
 body {
   margin: 0%;
   padding: 0%;
-  
   /* overflow-y: hidden; Hide vertical scrollbar */
   /* overflow-x: auto; Keep horizontal scrollbar */
 }

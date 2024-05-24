@@ -104,7 +104,7 @@ const AdminSidebar = () => {
           left: 0,
           height: "100vh",
           zIndex: 99999999999999,
-          width: isCollapsed ? "0%" : "20%",
+          width: isCollapsed ? "0%" : "16%",
         }}
       >
         <Menu>
