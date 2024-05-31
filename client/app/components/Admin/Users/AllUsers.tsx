@@ -145,7 +145,7 @@ const AllCourses: FC<Props> = ({ isTeam }) => {
   };
 
   return (
-    <div className="mt-[70px]">
+    <div className="mt-[100px]">
       {isLoading ? (
         <Loader />
       ) : (
@@ -153,7 +153,7 @@ const AllCourses: FC<Props> = ({ isTeam }) => {
           {isTeam && (
             <div className="w-full flex justify-end">
               <div
-                className={`${styles.button} !w-[200px] !rounded-[10px] mt-5 dark:bg-[#57c7a3] !h-[35px] dark:border dark:border-[#ffffff6c]`}
+                className={`${styles.button} !w-[200px] !rounded-[10px] dark:bg-[#57c7a3] !h-[35px] dark:border dark:border-[#ffffff6c]`}
                 onClick={() => setActive(!active)}
               >
                 Add New Member
@@ -161,7 +161,7 @@ const AllCourses: FC<Props> = ({ isTeam }) => {
             </div>
           )}
           <Box
-            m="30px 0 0 0"
+            m="40px 0 0 0"
             height="80vh"
             sx={{
               "& .MuiDataGrid-root": {
@@ -202,6 +202,7 @@ const AllCourses: FC<Props> = ({ isTeam }) => {
                 color: theme === "dark" ? "#fff" : "#000",
                 borderTop: "none",
                 backgroundColor: theme === "dark" ? "#3e4396" : "#A4A9FC",
+                mb: "20px",
               },
               "& .MuiCheckbox-root": {
                 color:
