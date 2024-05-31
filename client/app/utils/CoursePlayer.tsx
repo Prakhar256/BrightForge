@@ -5,7 +5,7 @@ type Props = {
   videoUrl: string;
   title: string;
 };
-
+ 
 const CoursePlayer: FC<Props> = ({ videoUrl }) => {
   const [videoData, setVideoData] = useState({
     otp: "",
@@ -26,7 +26,7 @@ const CoursePlayer: FC<Props> = ({ videoUrl }) => {
     <div style={{position:"relative",paddingTop:"56.25%",overflow:"hidden"}}>
       {videoData.otp && videoData.playbackInfo !== "" && (
         <iframe
-          src={`https://player.vdocipher.com/v2/?otp=${videoData?.otp}&playbackInfo=${videoData.playbackInfo}&player=Ub9OiZXIOeUXH0Nv`}
+          src={`https://player.vdocipher.com/v2/?otp=${videoData?.otp}&playbackInfo=${videoData.playbackInfo}&player=HGHezRQqc2u1PiQ7`}
           style={{
             position: "absolute",
             top: 0,
@@ -35,7 +35,7 @@ const CoursePlayer: FC<Props> = ({ videoUrl }) => {
             height: "100%",
             border: 0
           }}
-          allowFullScreen={true}
+          allowFullScreen={true} 
           allow="encrypted-media"
         ></iframe>
       )}
