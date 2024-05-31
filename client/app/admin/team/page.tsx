@@ -12,11 +12,11 @@ const page = (props: Props) => {
   return (
     <div>
       <AdminProtected>
-      <Heading
+        <Heading
           title="Bright Forge"
           description="Bright Forge is a platform for students to learn coding and get expertise from industry level experts"
           keywords="DSA, MERN stack development, Generative AI, Machine Learning"
-        /> 
+        />
         <div className="flex h-screen">
           <div className="1500px:w-[16%] w-1/5">
             <AdminSidebar />
