@@ -22,7 +22,7 @@ const EditCourse: FC<Props> = ({ id }) => {
     {},
     { refetchOnMountOrArgChange: true }
   );
-
+console.log(data);
   const editCourseData = data && data.courses.find((i: any) => i._id === id);
 
   useEffect(() => {
