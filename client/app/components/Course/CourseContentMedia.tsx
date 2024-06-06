@@ -99,7 +99,61 @@ const CourseContentMedia = ({
     }
   };
 
-  
+  useEffect(() => {
+    if (isSuccess) {
+      setQuestion("");
+      refetch();
+      
+    }
+    if (answerSuccess) {
+      setAnswer("");
+      refetch();
+      
+    }
+    if (error) {
+      if ("data" in error) {
+        const errorMessage = error as any;
+        toast.error(errorMessage.data.message);
+      }
+    }
+    if (answerError) {
+      if ("data" in answerError) {
+        const errorMessage = error as any;
+        toast.error(errorMessage.data.message);
+      }
+    }
+    if (reviewSuccess) {
+      setReview("");
+      setRating(1);
+      courseRefetch();
+      
+    }
+    if (reviewError) {
+      if ("data" in reviewError) {
+        const errorMessage = error as any;
+        toast.error(errorMessage.data.message);
+      }
+    }
+    if (replySuccess) {
+      setReply("");
+      courseRefetch();
+    }
+    if (replyError) {
+      if ("data" in replyError) {
+        const errorMessage = error as any;
+        toast.error(errorMessage.data.message);
+      }
+    }
+  }, [
+    isSuccess,
+    error,
+    answerSuccess,
+    answerError,
+    reviewSuccess,
+    reviewError,
+    replySuccess,
+    replyError,
+  ]);
 
   const handleAnswerSubmit = () => {
     addAnswerInQuestion({
