@@ -20,6 +20,9 @@ import {
 import { BiMessage } from "react-icons/bi";
 import { VscVerifiedFilled } from "react-icons/vsc";
 import Ratings from "@/app/utils/Ratings";
+import socketIO from "socket.io-client";
+const ENDPOINT = process.env.NEXT_PUBLIC_SOCKET_SERVER_URI || "";
+const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
 
 type Props = {
   data: any;
@@ -103,12 +106,22 @@ const CourseContentMedia = ({
     if (isSuccess) {
       setQuestion("");
       refetch();
-      
+      socketId.emit("notification", {
+        title: `New Question Received`,
+        message: `You have a new question in ${data[activeVideo].title}`,
+        userId: user._id,
+      });
     }
     if (answerSuccess) {
       setAnswer("");
       refetch();
-      
+      if (user.role !== "admin") {
+        socketId.emit("notification", {
+          title: `New Reply Received`,
+          message: `You have a new question in ${data[activeVideo].title}`,
+          userId: user._id,
+        });
+      }
     }
     if (error) {
       if ("data" in error) {
@@ -126,7 +139,11 @@ const CourseContentMedia = ({
       setReview("");
       setRating(1);
       courseRefetch();
-      
+      socketId.emit("notification", {
+        title: `New Question Received`,
+        message: `You have a new question in ${data[activeVideo].title}`,
+        userId: user._id,
+      });
     }
     if (reviewError) {
       if ("data" in reviewError) {
@@ -395,9 +412,11 @@ const CourseContentMedia = ({
             <div className="w-full">
               {(course?.reviews && [...course.reviews].reverse())?.map(
                 (item: any, index: number) => {
-                  
                   return (
-                    <div className="w-full my-5 dark:text-white text-black" key={index}>
+                    <div
+                      className="w-full my-5 dark:text-white text-black"
+                      key={index}
+                    >
                       <div className="w-full flex">
                         <div>
                           <Image
@@ -421,23 +440,24 @@ const CourseContentMedia = ({
                           </small>
                         </div>
                       </div>
-                      {user.role === "admin" && item.commentReplies.length === 0 && (
-                        <span
-                          className={`${styles.label} !ml-10 cursor-pointer`}
-                          onClick={() => {
-                            setIsReviewReply(true);
-                            setReviewId(item._id);
-                          }}
-                        >
-                          Add Reply
-                        </span>
-                      )}
+                      {user.role === "admin" &&
+                        item.commentReplies.length === 0 && (
+                          <span
+                            className={`${styles.label} !ml-10 cursor-pointer`}
+                            onClick={() => {
+                              setIsReviewReply(true);
+                              setReviewId(item._id);
+                            }}
+                          >
+                            Add Reply
+                          </span>
+                        )}
 
                       {isReviewReply && reviewId === item._id && (
                         <div className="w-full flex relative">
                           <input
                             type="text"
-                            placeholder="Enter your reply..."
+                            placeholder="Enter your reply "
                             value={reply}
                             onChange={(e: any) => setReply(e.target.value)}
                             className="block 800px:ml-12 mt-2 outline-none bg-transparent border-b border-[#000] dark:border-[#fff] p-[5px] w-[95%]"
@@ -453,7 +473,10 @@ const CourseContentMedia = ({
                       )}
 
                       {item.commentReplies.map((i: any, index: number) => (
-                        <div className="w-full flex 800px:ml-16 my-5" key={index}>
+                        <div
+                          className="w-full flex 800px:ml-16 my-5"
+                          key={index}
+                        >
                           <div className="w-[50px] h-[50px]">
                             <Image
                               src={
@@ -575,17 +598,20 @@ const CommentItem = ({
           </span>
           <BiMessage
             size={20}
-            className="dark:text-[#ffffff83] cursor-pointer text-[#000000b8]"
+            className="dark:text-[#ffffff83] cursor-pointer text-[#000000b8] mt-1"
           />
-          <span className="pl-1 mt-[-4px] cursor-pointer text-[#000000b8] dark:text-[#ffffff83]">
+          <span className="pl-1 mt-0.25 cursor-pointer text-[#000000b8] dark:text-[#ffffff83]">
             {item.questionReplies.length}
           </span>
         </div>
 
-        {replyActive && questionId === item._id &&  (
+        {replyActive && questionId === item._id && (
           <>
             {item.questionReplies.map((item: any) => (
-              <div className="w-full flex 800px:ml-16 my-5 text-black dark:text-white" key={item._id}>
+              <div
+                className="w-full flex 800px:ml-16 my-5 text-black dark:text-white"
+                key={item._id}
+              >
                 <div>
                   <Image
                     src={
