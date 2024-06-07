@@ -28,8 +28,8 @@ const ReviewCard = (props: Props) => {
           </div>
           <Ratings rating={5} />
         </div>
-         {/* for mobile */}
-         <div className="800px:hidden justify-between w-full flex flex-col">
+        {/* for mobile */}
+        <div className="800px:hidden justify-between w-full flex flex-col">
           <div className="pl-4">
             <h5 className="text-[20px] text-black dark:text-white">
               {props.item.name}
@@ -43,7 +43,7 @@ const ReviewCard = (props: Props) => {
       </div>
       <p
         className="pt-2 px-2 font-Poppins
-      text-black dark:text-white
+      text-black dark:text-white text-justify
       "
       >
         {props.item.comment}
@@ -52,4 +52,4 @@ const ReviewCard = (props: Props) => {
   );
 };
 
-export default ReviewCard;  
+export default ReviewCard;

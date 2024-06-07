@@ -104,7 +104,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
               <NavItems activeItem={activeItem} isMobile={false} />
               <ThemeSwitcher />
               {/* only for mobile */}
-              <div className="800px:hidden">
+              <div className="800px:hidden mr-3">
                 <HiOutlineMenuAlt3
                   size={25}
                   className="cursor-pointer dark:text-white text-black"
@@ -149,7 +149,7 @@ const Header: FC<Props> = ({ activeItem, setOpen, route, open, setRoute }) => {
                     alt=""
                     width={30}
                     height={30}
-                    className="w-[30px] h-[30px] rounded-full ml-[20px] cursor-pointer"
+                    className="w-[30px] h-[30px] rounded-full ml-[25px] mt-[10px] cursor-pointer"
                     style={{border: activeItem === 5 ? "2px solid #37a39a" : "none"}}
                   />
                 </Link>
