@@ -12,6 +12,7 @@ import Loader from "./components/Loader/Loader";
 import socketIO from "socket.io-client";
 const ENDPOINT = process.env.NEXT_PUBLIC_SOCKET_SERVER_URI || "";
 const socketId = socketIO(ENDPOINT, { transports: ["websocket"] });
+import { Suspense } from "react";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -37,10 +38,12 @@ export default function RootLayout({
       >
         <Providers>
           <SessionProvider>
-          <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
-              <Custom>
-                <div>{children}</div>
-              </Custom>
+            <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+              <Suspense>
+                <Custom>
+                  <div>{children}</div>
+                </Custom>
+              </Suspense>
               <Toaster position="top-center" reverseOrder={false} />
             </ThemeProvider>
           </SessionProvider>
@@ -57,5 +60,10 @@ const Custom: FC<{ children: React.ReactNode }> = ({ children }) => {
     socketId.on("connection", () => {});
   }, []);
 
-  return <> <div>{children} </div> </>;
+  return (
+    <>
+      {" "}
+      <div>{children} </div>{" "}
+    </>
+  );
 };

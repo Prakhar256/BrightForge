@@ -57,11 +57,9 @@ const Page = (props: Props) => {
           />
           <div className="w-[95%] 800px:w-[85%] m-auto min-h-[70vh]">
             <Heading
-              title={"All courses - Bright Forge"}
-              description={"Bright Forge is a platform for programming community."}
-              keywords={
-                "programming community, coding skills, expert insights, collaboration, growth"
-              }
+              title="Bright Forge"
+              description="Bright Forge is a platform for students to learn coding and get expertise from industry level experts"
+              keywords="DSA, MERN stack development, Generative AI, Machine Learning"
             />
             <br />
             <div className="w-full flex items-center flex-wrap">
@@ -89,13 +87,15 @@ const Page = (props: Props) => {
                   </div>
                 ))}
             </div>
-            {
-                courses && courses.length === 0 && (
-                    <p className={`${styles.label} justify-center min-h-[50vh] flex items-center`}>
-                    {search ? "No courses found!" : "No courses found in this category. Please try another one!"}
-                  </p>
-                )
-            }
+            {courses && courses.length === 0 && (
+              <p
+                className={`${styles.label} justify-center min-h-[50vh] flex items-center`}
+              >
+                {search
+                  ? "No courses found!"
+                  : "No courses found in this category. Please try another one!"}
+              </p>
+            )}
             <br />
             <br />
             <div className="grid grid-cols-1 gap-[20px] md:grid-cols-2 md:gap-[25px] lg:grid-cols-3 lg:gap-[25px] 1500px:grid-cols-4 1500px:gap-[35px] mb-12 border-0">
