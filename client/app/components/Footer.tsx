@@ -23,7 +23,7 @@ const Footer = (props: Props) => {
               </li>
               <li>
                 <Link
-                  href="/privacy-policy"
+                  href="/policy"
                   className="text-base text-black dark:text-gray-300 dark:hover:text-white"
                 >
                   Privacy Policy
@@ -73,26 +73,26 @@ const Footer = (props: Props) => {
             <ul className="space-y-4">
               <li>
                 <Link
-                  href="https://www.youtube.com/channel/"
+                  href="https://www.linkedin.com/in/prakharjain256/"
                   className="text-base text-black dark:text-gray-300 dark:hover:text-white"
                 >
-                  Youtube
+                  Linkedin
                 </Link>
               </li>
               <li>
                 <Link
-                  href="https://www.instagram.com/"
+                  href="https://github.com/Prakhar256"
                   className="text-base text-black dark:text-gray-300 dark:hover:text-white"
                 >
-                  Instagram
+                  Github
                 </Link>
               </li>
               <li>
                 <Link
-                  href="https://www.github.com/"
+                  href="https://prakhar-portfolio-ten.vercel.app/"
                   className="text-base text-black dark:text-gray-300 dark:hover:text-white"
                 >
-                  github
+                  Portfolio
                 </Link>
               </li>
             </ul>
@@ -102,13 +102,9 @@ const Footer = (props: Props) => {
             <p className="text-base text-black dark:text-gray-300 dark:hover:text-white pb-2">
             Call Us: 1-885-665-2022
             </p>
-           
-            <p className="text-base text-black dark:text-gray-300 dark:hover:text-white pb-2">
-            Address: +7011 Vermont Ave, Los Angeles, CA 90044
-            </p>
          
             <p className="text-base text-black dark:text-gray-300 dark:hover:text-white  pb-2">
-            Mail Us: support@BrightForge.com
+            Mail us: <a href="mailto:prakharjain256@gmail.com"> support@BrightForge.com</a>
             </p>
             
           </div>

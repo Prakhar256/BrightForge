@@ -67,11 +67,8 @@ const Reviews = (props: Props) => {
             <br /> See What They Say About Us
           </h3>
           <br />
-          <p className={styles.label}>
-            Lorem ipsum dolor sit amet consectetur adipisicing elit. Eaque unde
-            voluptatum dignissimos, nulla perferendis dolorem voluptate nemo
-            possimus magni deleniti natus accusamus officiis quasi nihil
-            commodi, praesentium quidem, quis doloribus?
+          <p className="py-2 ml-[-15px] text-[16px] font-Poppins leading-8 whitespace-pre-line text-justify">
+            ** These user reviews and profile icons are generated using randomuser api since this website is just launched ,so actively we dont have much users.
           </p>
         </div>
         <br />
