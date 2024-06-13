@@ -141,7 +141,7 @@ const AllCourses = (props: Props) => {
                 color: theme === "dark" ? "#fff" : "#000",
               },
               "& .MuiDataGrid-columnHeaders": {
-                color: theme === "dark" ? "#fff" : "#000",
+                color: "#000",
                 borderBottom: "none",
                 backgroundColor: theme === "dark" ? "#3e4396" : "#A4A9FC",
               },

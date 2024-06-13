@@ -70,14 +70,14 @@ export default function OrdersAnalytics({ isDashboard }: Props) {
             <h1
               className={`${styles.title} ${
                 isDashboard && "!text-[20px]"
-              } px-5 !text-start`}
+              } px-5 !text-centre`}
             >
               Orders Analytics
             </h1>
             {!isDashboard && (
-              <p className={`${styles.label} px-5`}>
-                Last 12 months analytics data{" "}
-              </p>
+              <h6 className={`${styles.title}} px-5 font-light `}>
+              Last 12 months analytics data{" "}
+            </h6>
             )}
           </div>
           <div
